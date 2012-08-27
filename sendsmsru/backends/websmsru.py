@@ -45,29 +45,29 @@ class HTTPClient(BaseSmsBackend):
                   http_password=WEBSMSRU_PASSWORD)
 
     def _send(self, message):
-        for to in message.to:
-            d = {
-                'message': message.body,
-                'phone_list': to,
-                'packet_id': hash(self),
-                'fromPhone']: message.from_phone,
-            }
+        context = {
+            'message': message.body,
+            'phone_list': ','.join(message.to),
+            'packet_id': hash(self),
+            'fromPhone']: message.from_phone,
+        }
 
-            d.update(self.common)
-            params = urllib.urlencode(d)
+        context.update(self.common)
 
-            resp = urllib2.urlopen('%s?%s' % (SEND_ADDR, params,))
-            resp_cp = ConfigParser.RawConfigParser()
-            resp_cp.readfp(resp)
+        params = urllib.urlencode(context)
+        resp = urllib2.urlopen('%s?%s' % (SEND_ADDR, params,))
 
-            status = resp_cp.get('Common', 'error_num')
-            if status != 'OK':
-                errortext = 'Error sending: %s' % status
-                if not self.fail_silently:
-                    raise Exception(errortext)
-                else:
-                    logger.error(errortext)
-                    return False
+        resp_cp = ConfigParser.RawConfigParser()
+        resp_cp.readfp(resp)
+
+        status = resp_cp.get('Common', 'error_num')
+        if status != 'OK':
+            errortext = 'Error sending: %s' % status
+            if not self.fail_silently:
+                raise Exception(errortext)
+            else:
+                logger.error(errortext)
+                return False
         return True
 
     def send_messages(self, messages):
