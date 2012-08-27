@@ -75,3 +75,6 @@ class HTTPClient(BaseSmsBackend):
         for message in messages:
             result += self._send(message)
         return result
+
+class SMPPClient(BaseSmsBackend):
+    pass  # TODO
