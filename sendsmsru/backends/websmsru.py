@@ -55,7 +55,7 @@ class HTTPClient(BaseSmsBackend):
         context.update(self.common)
 
         params = urllib.urlencode(context)
-        resp = urllib2.urlopen('%s?%s' % (SEND_ADDR, params,))
+        resp = urllib2.urlopen('%s?%s' % (WEBSMSRU_HTTP_URL, params,))
 
         resp_cp = ConfigParser.RawConfigParser()
         resp_cp.readfp(resp)
