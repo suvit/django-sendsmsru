@@ -53,7 +53,6 @@ class HTTPClient(BaseSmsBackend):
         context = {
             'message': message.body,
             'phone_list': ','.join(message.to),
-            'packet_id': hash(self),
             'fromPhone': message.from_phone,
         }
 
