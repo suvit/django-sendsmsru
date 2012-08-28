@@ -15,24 +15,29 @@ WEBSMSRU_USERNAME = settings.WEBSMSRU_USERNAME
 WEBSMSRU_PASSWORD = settings.WEBSMSRU_PASSWORD
 
 class SMTPClient(BaseSmsBackend):
+    def format_phone(self, phone):
+        return phone.lstrip('+')
+
     def send_messages(self, messages):
+
         result = 0
         for message in messages:
             context = dict(user=WEBSMSRU_USERNAME,
-                           pass=WEBSMSRU_PASSWORD,
-                           from=message.from_phone,
-                           tels=','.join(message.to),
+                           password=WEBSMSRU_PASSWORD,
+                           from_phone=self.format_phone(message.from_phone),
+                           tels=','.join(self.format_phone(tel)
+                                         for tel in message.to),
                            mess=message.body)
-            body = u"""
-user={user}
-pass={pass}
-fromPhone={from}
+            body = \
+u"""user={user}
+pass={password}
+fromPhone={from_phone}
 tels={tels}
 mess={mess}
-""".format(context)
+""".format(**context)
             msg = EmailMessage(subject=u'Send sms: %s' % message.body,
                                body=body,
-                               to=WEBSMSRU_SMTP_EMAIL)
+                               to=[self.format_phone(WEBSMSRU_SMTP_EMAIL)])
 
             result += msg.send(fail_silently=self.fail_silently)
 
@@ -49,7 +54,7 @@ class HTTPClient(BaseSmsBackend):
             'message': message.body,
             'phone_list': ','.join(message.to),
             'packet_id': hash(self),
-            'fromPhone']: message.from_phone,
+            'fromPhone': message.from_phone,
         }
 
         context.update(self.common)
