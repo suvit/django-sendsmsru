@@ -9,6 +9,14 @@ from setuptools import setup, find_packages
 
 from sendsmsru import VERSION
 
+reqs = file(os.path.join(os.path.dirname(__file__), 'requirements.txt')
+           ).read().split()
+
+try:
+    import importlib
+except ImportError:
+    reqs.append('importlib')
+
 
 setup(
     name='django-sendsmsru',
@@ -27,11 +35,6 @@ setup(
     url='http://github.com/suvit/django-sendsmsru',
     zip_safe=False,
     packages=find_packages(exclude=['docs', 'examples', 'tests']),
-    install_requires=file(
-        os.path.join(
-            os.path.dirname(__file__),
-            'requirements.txt'
-        )
-    ).read().split(),
+    install_requires=reqs,
     include_package_data=True,
 )
