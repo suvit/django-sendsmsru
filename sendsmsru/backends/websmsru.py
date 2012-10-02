@@ -5,6 +5,7 @@ import urllib2
 
 from django.conf import settings
 from django.core.mail import EmailMessage
+from django.utils.encoding import smart_str
 
 from sendsms.backends.base import BaseSmsBackend
 
@@ -43,6 +44,7 @@ mess={mess}
 
         return result
 
+
 # based on https://github.com/mediasite/smsgate/blob/master/smsgate/gates/websms.py                       
 class HTTPClient(BaseSmsBackend):
 
@@ -51,9 +53,9 @@ class HTTPClient(BaseSmsBackend):
 
     def _send(self, message):
         context = {
-            'message': message.body,
+            'message': smart_str(message.body),
             'phone_list': ','.join(message.to),
-            'fromPhone': message.from_phone,
+            'fromPhone': smart_str(message.from_phone),
         }
 
         context.update(self.common)
