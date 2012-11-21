@@ -15,6 +15,7 @@ WEBSMSRU_HTTP_URL = 'http://websms.ru/http_in5.asp'
 WEBSMSRU_USERNAME = settings.WEBSMSRU_USERNAME
 WEBSMSRU_PASSWORD = settings.WEBSMSRU_PASSWORD
 
+
 class SMTPClient(BaseSmsBackend):
     def format_phone(self, phone):
         return phone.lstrip('+')
@@ -53,9 +54,10 @@ class HTTPClient(BaseSmsBackend):
 
     def _send(self, message):
         context = {
-            'message': smart_str(message.body),
+            'message': smart_str(message.body, encoding='cp1251'),
             'phone_list': ','.join(message.to),
-            'fromPhone': smart_str(message.from_phone),
+            'fromPhone': smart_str(message.from_phone,
+                                   encoding='ascii', errors='ignore'),
         }
 
         context.update(self.common)
@@ -81,6 +83,7 @@ class HTTPClient(BaseSmsBackend):
         for message in messages:
             result += self._send(message)
         return result
+
 
 class SMPPClient(BaseSmsBackend):
     pass  # TODO
