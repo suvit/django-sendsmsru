@@ -70,7 +70,7 @@ class HTTPClient(BaseSmsBackend):
 
         status = resp_cp.get('Common', 'error_num')
         if status != 'OK':
-            errortext = 'Error sending: %s' % status
+            errortext = 'Error sending: %s' % status.decode('cp1251')
             if not self.fail_silently:
                 raise Exception(errortext)
             else:
