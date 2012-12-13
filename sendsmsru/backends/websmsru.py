@@ -66,8 +66,15 @@ class HTTPClient(BaseSmsBackend):
         resp = urllib2.urlopen('%s?%s' % (WEBSMSRU_HTTP_URL, params,))
 
         resp_cp = ConfigParser.RawConfigParser()
-        resp_cp.readfp(resp)
-
+        try:
+            resp_cp.readfp(resp)
+        except ConfigParser.Error:
+            if not self.fail_silently:
+                raise
+            else:
+                logger.error('Error sending: %s' % resp_cp.read())
+                return False
+ 
         status = resp_cp.get('Common', 'error_num')
         if status != 'OK':
             errortext = 'Error sending: %s' % status
