@@ -18,6 +18,7 @@ WEBSMSRU_HTTP_URL = 'http://websms.ru/http_in5.asp'
 WEBSMSRU_USERNAME = settings.WEBSMSRU_USERNAME
 WEBSMSRU_PASSWORD = settings.WEBSMSRU_PASSWORD
 
+
 class SMTPClient(BaseSmsBackend):
     def format_phone(self, phone):
         return phone.lstrip('+')
@@ -56,9 +57,10 @@ class HTTPClient(BaseSmsBackend):
 
     def _send(self, message):
         context = {
-            'message': smart_str(message.body),
+            'message': smart_str(message.body, encoding='cp1251'),
             'phone_list': ','.join(message.to),
-            'fromPhone': smart_str(message.from_phone),
+            'fromPhone': smart_str(message.from_phone,
+                                   encoding='ascii', errors='ignore'),
         }
 
         context.update(self.common)
@@ -67,11 +69,18 @@ class HTTPClient(BaseSmsBackend):
         resp = urllib2.urlopen('%s?%s' % (WEBSMSRU_HTTP_URL, params,))
 
         resp_cp = ConfigParser.RawConfigParser()
-        resp_cp.readfp(resp)
-
+        try:
+            resp_cp.readfp(resp)
+        except ConfigParser.Error:
+            if not self.fail_silently:
+                raise
+            else:
+                logger.error('Error sending: %s' % resp_cp.read())
+                return False
+ 
         status = resp_cp.get('Common', 'error_num')
         if status != 'OK':
-            errortext = 'Error sending: %s' % status
+            errortext = 'Error sending: %s' % status.decode('cp1251')
             if not self.fail_silently:
                 raise Exception(errortext)
             else:
@@ -85,6 +94,7 @@ class HTTPClient(BaseSmsBackend):
         for message in messages:
             result += self._send(message)
         return result
+
 
 class SMPPClient(BaseSmsBackend):
     pass  # TODO
