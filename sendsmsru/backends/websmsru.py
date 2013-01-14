@@ -1,5 +1,6 @@
 #-*- coding: UTF-8 -*-
 import ConfigParser
+import logging
 import urllib
 import urllib2
 
@@ -8,6 +9,8 @@ from django.core.mail import EmailMessage
 from django.utils.encoding import smart_str
 
 from sendsms.backends.base import BaseSmsBackend
+
+logger = logging.getLogger(__name__)
 
 WEBSMSRU_SMTP_EMAIL = 'post@websms.ru'
 WEBSMSRU_HTTP_URL = 'http://websms.ru/http_in5.asp'
@@ -72,8 +75,9 @@ class HTTPClient(BaseSmsBackend):
             if not self.fail_silently:
                 raise Exception(errortext)
             else:
-                logger.error(errortext)
+                logger.exception(errortext)
                 return False
+        logger.debug(u'sms sended %s' % message.body)
         return True
 
     def send_messages(self, messages):
