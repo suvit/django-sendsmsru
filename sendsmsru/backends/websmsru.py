@@ -66,7 +66,14 @@ class HTTPClient(BaseSmsBackend):
         context.update(self.common)
 
         params = urllib.urlencode(context)
-        resp = urllib2.urlopen('%s?%s' % (WEBSMSRU_HTTP_URL, params,))
+        try:
+            resp = urllib2.urlopen('%s?%s' % (WEBSMSRU_HTTP_URL, params,))
+        except IOError, exc:
+            if not self.fail_silently:
+                raise
+            else:
+                logger.error(u'Error sending: %s' % unicode(exc))
+                return False
 
         resp_cp = ConfigParser.RawConfigParser()
         try:
@@ -75,7 +82,7 @@ class HTTPClient(BaseSmsBackend):
             if not self.fail_silently:
                 raise
             else:
-                logger.error('Error sending: %s' % resp_cp.read())
+                logger.error(u'Error sending: %s' % resp_cp.read())
                 return False
  
         status = resp_cp.get('Common', 'error_num')
