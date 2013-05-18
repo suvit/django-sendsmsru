@@ -13,3 +13,15 @@ backends for infosmska.ru
 ------------------------------
 
 * sendsmsru.backends.websmsru.HTTPClient
+
+CHANGES
+------------------
+
+* 0.1.6
+
+   * Added infosmska.ru http backend
+
+SEO keywords
+----------------------
+
+django отправка смс, django send russian sms, как отправить sms через django, django sms
