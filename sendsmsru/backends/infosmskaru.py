@@ -1,5 +1,10 @@
-
+#-*- coding: UTF-8 -*-
 import logging
+import urllib
+import urllib2
+
+from django.conf import settings
+from django.utils.encoding import smart_str
 
 from sendsms.backends.base import BaseSmsBackend
 
@@ -13,8 +18,12 @@ PASSWORD = settings.INFOSMSKARU_PASSWORD
 
 class HTTPClient(BaseSmsBackend):
 
-    common = dict(login=INFOSMSKARU_USERNAME,
-                  pwd=INFOSMSKARU_PASSWORD)
+    common = dict(login=USERNAME,
+                  pwd=PASSWORD)
+
+
+    def format_phone(self, phone):
+        return phone.lstrip('+')
 
     def send_messages(self, messages):
         result = 0
@@ -25,7 +34,8 @@ class HTTPClient(BaseSmsBackend):
     def _send(self, message):
         context = {
             'message': smart_str(message.body, encoding='utf8'),
-            'phones': ','.join(message.to),
+            'phones': ','.join(self.format_phone(tel)
+                               for tel in message.to),
             'sender': smart_str(message.from_phone,
                                 encoding='ascii', errors='ignore'),
         }
@@ -43,14 +53,15 @@ class HTTPClient(BaseSmsBackend):
                 return False
 
         resp = resp.read()
-        if not resp.startwith('Ok:'):
+        logger.debug('response was %s' % resp)
+        if not resp.startswith('Ok:'):
             if not self.fail_silently:
                 raise RuntimeError(resp)
             else:
                 logger.error(u'Error sending: %s' % resp)
                 return False
 
-        logger.debug(u'sms sended %s' % message.body)
+        logger.debug(u'sms sended %s' % unicode(message.body))
         return True
 
 
