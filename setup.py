@@ -9,19 +9,14 @@ from setuptools import setup, find_packages
 
 from sendsmsru import VERSION
 
-reqs = file(os.path.join(os.path.dirname(__file__), 'requirements.txt')
-           ).read().split()
-
 try:
     import importlib
 except ImportError:
     reqs.append('importlib')
 
-
 setup(
     name='django-sendsmsru',
     version=VERSION,
-
     description='Russian backends for django-sendsms',
     long_description=file(
         os.path.join(
@@ -35,6 +30,7 @@ setup(
     url='http://github.com/suvit/django-sendsmsru',
     zip_safe=False,
     packages=find_packages(exclude=['docs', 'examples', 'tests']),
-    install_requires=reqs,
+    install_requires=['django',
+                      'django-sendsms'],
     include_package_data=True,
 )
