@@ -24,4 +24,4 @@ CHANGES
 SEO keywords
 ----------------------
 
-django ��ࠢ�� ��, django send russian sms, ��� ��ࠢ��� sms �१ django, django sms
+django отправка смс, django send russian sms, как отправить sms через django, django sms
