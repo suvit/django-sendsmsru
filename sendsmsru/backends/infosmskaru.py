@@ -13,8 +13,8 @@ PASSWORD = settings.INFOSMSKARU_PASSWORD
 
 class HTTPClient(BaseSmsBackend):
 
-    common = dict(login=WEBSMSRU_USERNAME,
-                  pwd=WEBSMSRU_PASSWORD)
+    common = dict(login=INFOSMSKARU_USERNAME,
+                  pwd=INFOSMSKARU_PASSWORD)
 
     def send_messages(self, messages):
         result = 0
@@ -44,9 +44,11 @@ class HTTPClient(BaseSmsBackend):
 
         resp = resp.read()
         if not resp.startwith('Ok:'):
-            logger.debug(u'sms not sended %s' % message.body)
-
-            return False
+            if not self.fail_silently:
+                raise RuntimeError(resp)
+            else:
+                logger.error(u'Error sending: %s' % resp)
+                return False
 
         logger.debug(u'sms sended %s' % message.body)
         return True
