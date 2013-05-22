@@ -17,6 +17,10 @@ backends for infosmska.ru
 CHANGES
 ------------------
 
+* 0.1.8
+   
+   * fixed unicode bugs in infosmska.ru http backend
+
 * 0.1.7
    
    * fixed bugs in infosmska.ru http backend
