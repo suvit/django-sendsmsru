@@ -23,7 +23,10 @@ class HTTPClient(BaseSmsBackend):
 
 
     def format_phone(self, phone):
-        return phone.lstrip('+')
+        phone = phone.lstrip('+')
+        if len(phone) == 10:  # by default add russian code
+             phone = '7' + phone
+        return phone
 
     def send_messages(self, messages):
         result = 0
