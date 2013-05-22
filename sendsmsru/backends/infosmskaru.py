@@ -52,7 +52,7 @@ class HTTPClient(BaseSmsBackend):
             if not self.fail_silently:
                 raise
             else:
-                logger.error(u'Error sending: %s' % unicode(exc))
+                logger.error('Error sending: %s' % repr(exc))
                 return False
 
         resp = resp.read()
@@ -61,10 +61,10 @@ class HTTPClient(BaseSmsBackend):
             if not self.fail_silently:
                 raise RuntimeError(resp)
             else:
-                logger.error(u'Error sending: %s' % repr(resp))
+                logger.error('Error sending: %s' % repr(resp))
                 return False
 
-        logger.debug(u'sms sended %s' % smart_str(message.body, encoding='utf8'))
+        logger.debug('sms sended %s' % repr(message.body))
         return True
 
 
