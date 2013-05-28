@@ -17,6 +17,11 @@ backends for infosmska.ru
 
 * sendsmsru.backends.websmsru.HTTPClient
 
+backends for iqsms.ru TODO
+------------------------------
+
+* sendsmsru.backends.iqsmsru.HTTPClient
+
 CHANGES
 ------------------
 
