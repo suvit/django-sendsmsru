@@ -3,6 +3,9 @@ django-sendsmsru
 
 Russian backends for django-sendsms
 
+[![Last version](https://pypip.in/v/django-sendsmsru/badge.png)](https://crate.io/packages/django-sendsmsru)
+[![Downloads](https://pypip.in/d/django-sendsmsru/badge.png)](https://crate.io/packages/django-sendsmsru)
+
 backends for websms.ru
 -----------------------
 * sendsmsru.backends.websmsru.SMTPClient
@@ -13,6 +16,11 @@ backends for infosmska.ru
 ------------------------------
 
 * sendsmsru.backends.websmsru.HTTPClient
+
+backends for iqsms.ru TODO
+------------------------------
+
+* sendsmsru.backends.iqsmsru.HTTPClient
 
 CHANGES
 ------------------
