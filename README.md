@@ -17,6 +17,10 @@ backends for infosmska.ru
 CHANGES
 ------------------
 
+* 0.1.9
+   
+   * fixed setup.py installer
+
 * 0.1.8
    
    * fixed unicode bugs in infosmska.ru http backend
