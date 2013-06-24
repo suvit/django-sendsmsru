@@ -52,19 +52,19 @@ class HTTPClient(BaseSmsBackend):
             if not self.fail_silently:
                 raise
             else:
-                logger.error('Error sending: %s' % repr(exc))
+                logger.error(u'Error sending: %s', exc)
                 return False
 
         resp = resp.read()
-        logger.debug('response was %s' % resp)
+        logger.debug(u'response was %s', resp)
         if not resp.startswith('Ok:'):
             if not self.fail_silently:
                 raise RuntimeError(resp)
             else:
-                logger.error('Error sending: %s' % repr(resp))
+                logger.error(u'Error sending: %s', resp)
                 return False
 
-        logger.debug('sms sended %s' % repr(message.body))
+        logger.debug(u'sms sended %s', message.body)
         return True
 
 

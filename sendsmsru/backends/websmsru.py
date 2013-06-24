@@ -72,7 +72,7 @@ class HTTPClient(BaseSmsBackend):
             if not self.fail_silently:
                 raise
             else:
-                logger.error(u'Error sending: %s' % unicode(exc))
+                logger.error(u'Error sending: %s', exc)
                 return False
 
         resp_cp = ConfigParser.RawConfigParser()
@@ -82,7 +82,7 @@ class HTTPClient(BaseSmsBackend):
             if not self.fail_silently:
                 raise
             else:
-                logger.error(u'Error sending: %s' % resp_cp.read())
+                logger.error(u'Error sending: %s', resp_cp.read())
                 return False
  
         status = resp_cp.get('Common', 'error_num')
@@ -93,7 +93,7 @@ class HTTPClient(BaseSmsBackend):
             else:
                 logger.exception(errortext)
                 return False
-        logger.debug(u'sms sended %s' % message.body)
+        logger.debug(u'sms sended %s', message.body)
         return True
 
     def send_messages(self, messages):
