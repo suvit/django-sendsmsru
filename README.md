@@ -3,8 +3,8 @@ django-sendsmsru
 
 Russian backends for django-sendsms
 
-[![Last version](https://pypip.in/v/django-sendsmsru/badge.png)](https://crate.io/packages/django-sendsmsru)
-[![Downloads](https://pypip.in/d/django-sendsmsru/badge.png)](https://crate.io/packages/django-sendsmsru)
+[![Last version](https://img.shields.io/pypi/v/django-sendsmsru.svg)](https://crate.io/packages/django-sendsmsru)
+[![Downloads](https://img.shields.io/pypi/dm/django-sendsmsru.svg)](https://crate.io/packages/django-sendsmsru)
 
 backends for websms.ru
 -----------------------
